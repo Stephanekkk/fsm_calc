@@ -2,8 +2,42 @@ package stephane.katende.fsm_calc;
 
 public class Context {
     private State _currentState;
-    private boolean _pendingOP;
     public static String _state;
+    public String _buffer = ""; //the buffer holds all the inputs (none spaced)
+
+    /**
+     * get the current buffer (inputs typed)
+     * @return
+     */
+    public String getBuffer() {
+        return _buffer;
+    }
+
+    public void resetBuffer(){
+        _buffer = "";
+    }
+
+    /**
+     * set the buffer & display to the screen
+     */
+    public void set_buffer(String text){
+        if (_buffer.length() > 1){
+            this._buffer = text;
+            MainActivity.upDateScreen(_buffer,true); }
+
+    }
+
+    /**
+     * add to the buffer (the inputs) & display to the screen
+     * @param _buffer
+     */
+    public void addtoBuffer(char _buffer) {
+        this._buffer += _buffer;
+        MainActivity.upDateScreen(Character.toString(MainActivity._lasttypedChar));
+
+
+
+    }
 
     public Context(){
         _currentState = new ZeroState();
@@ -88,22 +122,6 @@ public class Context {
         _currentState.allClear();
     }
 
-    /**
-     *
-     * @return pendingOP
-     */
-    public boolean pendingOP(){
-        return _currentState.pendingOP();
-    }
 
 
-    /**
-     * Change what is displayed on the calculator's screen
-     * @param text the text to display, text <= MainActivity.MAX_CHARACTER_COUNT
-     */
-    public void upDateScreen(String text) {
-        if (text.length() <= MainActivity.MAX_CHARACTER_COUNT){
-            MainActivity._screen.setText(text);
-        }
-    }
 }

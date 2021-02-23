@@ -3,7 +3,6 @@ package stephane.katende.fsm_calc;
 import android.widget.Toast;
 
 public class ErrorState implements State{
-
     @Override
     public void zero() {
 
@@ -28,21 +27,12 @@ public class ErrorState implements State{
 
     @Override
     public void clear() {
-
+        MainActivity._CONTEXT.set_buffer(MainActivity._CONTEXT.getBuffer().substring(0, MainActivity._CONTEXT.getBuffer().length() -1));
     }
 
     @Override
     public void allClear() {
-
-    }
-
-    @Override
-    public boolean pendingOP() {
-        return false;
-    }
-
-
-    public void upDateScreen() {
-
+        MainActivity._CONTEXT.resetBuffer();
+        MainActivity.upDateScreen("",true);
     }
 }

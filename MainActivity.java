@@ -9,13 +9,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 // be very careful with objects and try not to make new instances of them, nothing will work how you intended it to :)
 public class MainActivity extends AppCompatActivity {
-    public static final int MAX_CHARACTER_COUNT = 30; //max number of char the text field can handle before overflow
+    public static final int MAX_CHARACTER_COUNT = 24; //max number of char the text field can handle before overflow
     public static Context _CONTEXT = new Context(); //the context object to control states
     public static TextView _screen; // the textfield of the app
-    public enum inputType {zero, nonZeroDigit, mathOP, equals, clear, allClear}//posible types of inputs
+    public static TextView _help; //the textfield that displays currentState
+    public static TextView _helpv1; //the textfield that displays buffer contents
+    public static char _lasttypedChar; //last typed char
+    public enum inputType {zero, nonZeroDigit, mathOP, equals, clear, allClear} //posible types of inputs
 
 
 
@@ -24,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         _screen = findViewById(R.id.answerView);
-
+        _help = findViewById(R.id.helperView);
+        _helpv1 = findViewById(R.id.helperView1);
     }
 
     /**
@@ -34,12 +39,21 @@ public class MainActivity extends AppCompatActivity {
      */
     public static void main(String[] args) {
 
-    int y = 0;
+        String x = "hello";
+        String y = "hi";
 
-    System.out.println("Hello");
+        System.out.println(x.charAt(4));
+        System.out.println(x.length());
+        System.out.println(x.substring(0,4));
 
-
-
+        String x1 = new String();
+        String x2 = "";
+        System.out.println(x1);
+        System.out.println(x2);
+        x1 += "hmm";
+        x2 += "hmm";
+        System.out.println(x1);
+        System.out.println(x2);
     }
 
     /**
@@ -50,7 +64,15 @@ public class MainActivity extends AppCompatActivity {
         int id = view.getId(); //what button is pressed?
         char buttonValue = valuePressed(id); //what is the char value of it?
         inputType input = buttonType(valuePressed(id)); //what type of input is it?
-        transitionState(_CONTEXT.get_currentStateString(), input);// what state should it be sent to?
+        _lasttypedChar = buttonValue;
+        transitionState(_CONTEXT.get_currentStateString(), input);// go to the right state
+
+
+
+
+
+        _help.setText("Your current state = "+_CONTEXT.get_currentStateString());
+        _helpv1.setText("Your current buffer containts = "+_CONTEXT.getBuffer());
 
     }
 
@@ -131,34 +153,43 @@ public class MainActivity extends AppCompatActivity {
      * @param input
      */
     public static void transitionState(String currentState, inputType input) {
+        //have 4 different methods for each state and use switch
         /**   ALL ZeroState transitions                  */
         if (currentState == "ZeroState" && input == inputType.zero) {
             _CONTEXT.zero();
         }else if(currentState == "ZeroState" && input == inputType.nonZeroDigit){
-
+            _CONTEXT.nonZeroDigit();
+            _CONTEXT.setCurrentState("AccumulatorState");
         }else if (currentState == "ZeroState" && input == inputType.mathOP){
-
+            _CONTEXT.mathOP();
         }else if (currentState == "ZeroState" && input == inputType.equals){
-
+            _CONTEXT.equals();
         }else if (currentState == "ZeroState" && input == inputType.clear){
-
+            _CONTEXT.clear();
         }else if (currentState == "ZeroState" && input == inputType.allClear){
-
+            _CONTEXT.allClear();
         }
         /**   ALL AccumulatorState transitions                  */
         if (currentState == "AccumulatorState" && input == inputType.zero) {
-
+            _CONTEXT.setCurrentState("AccumulatorState");
+            _CONTEXT.zero();
         }else if(currentState == "AccumulatorState" && input == inputType.nonZeroDigit){
-
+            _CONTEXT.setCurrentState("AccumulatorState");
+            _CONTEXT.nonZeroDigit();
         }else if (currentState == "AccumulatorState" && input == inputType.mathOP){
-
+            _CONTEXT.setCurrentState("AccumulatorState");
+            _CONTEXT.mathOP();
         }else if (currentState == "AccumulatorState" && input == inputType.equals){
-
+            _CONTEXT.equals();
+            _CONTEXT.setCurrentState("ComputedState");
         }else if (currentState == "AccumulatorState" && input == inputType.clear){
-
+            _CONTEXT.setCurrentState("AccumulatorState");
+            _CONTEXT.clear();
         }else if (currentState == "AccumulatorState" && input == inputType.allClear){
-
+            _CONTEXT.allClear();
+            _CONTEXT.setCurrentState("ZeroState");
         }
+
         /**   ALL ComputedState transitions                  */
         if (currentState == "ComputedState" && input == inputType.zero) {
 
@@ -171,7 +202,8 @@ public class MainActivity extends AppCompatActivity {
         }else if (currentState == "ComputedState" && input == inputType.clear){
 
         }else if (currentState == "ComputedState" && input == inputType.allClear){
-
+            _CONTEXT.allClear();
+            _CONTEXT.setCurrentState("ZeroState");
         }
         /**   ALL ErrorState transitions                  */
         if (currentState == "ErrorState" && input == inputType.zero) {
@@ -188,8 +220,34 @@ public class MainActivity extends AppCompatActivity {
             _CONTEXT.setCurrentState("ZeroState");
 
         }
+    }
 
+    /**
+     * Change what is displayed on the calculator's screen
+     * @param text the text to display, text <= MainActivity.MAX_CHARACTER_COUNT
+     */
+    public static void upDateScreen(String text) {
+
+        if (_CONTEXT._buffer.length() > MAX_CHARACTER_COUNT) {
+            _CONTEXT.resetBuffer();
+            _screen.setText("");
+        }
+            _screen.append(text);
 
     }
+
+    /**
+     * Change what is displayed on the calculator's screen
+     * @param text the text to display, text <= MainActivity.MAX_CHARACTER_COUNT
+     * @param set the screen text will be set
+     */
+    public static void upDateScreen(String text, boolean set) {
+
+        if (_CONTEXT._buffer.length() <= MAX_CHARACTER_COUNT && set) {
+            _screen.setText(text);
+        }
+
+    }
+
 }
 

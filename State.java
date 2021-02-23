@@ -35,11 +35,7 @@ public interface State {
      */
     public void allClear();
 
-    /**
-     * Is there a pending operation? (numbers already typed)
-     * @return pendingOP
-     */
-    public boolean pendingOP();
+
 
 
 

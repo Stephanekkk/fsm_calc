@@ -1,102 +1,41 @@
 package stephane.katende.fsm_calc;
 
 public class ZeroState implements State{
-    private boolean _pendingOp = false; //false indicates nothing has been typed yet, true means a valid argument has already been given to the user
-    private String _operation; //the number user typed
+
 
     @Override
     public void zero() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
-
+            //ignore
     }
 
     @Override
     public void nonZeroDigit() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
-
+        MainActivity._CONTEXT.addtoBuffer(MainActivity._lasttypedChar);
     }
 
     @Override
     public void mathOP() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
-
+        // ignore
     }
 
     @Override
     public void equals() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
-
+        // ignore
     }
 
     @Override
     public void clear() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
+        MainActivity._CONTEXT.set_buffer(MainActivity._CONTEXT.getBuffer().substring(0, MainActivity._CONTEXT.getBuffer().length() -1));
     }
 
     @Override
     public void allClear() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
+        MainActivity._CONTEXT.resetBuffer();
+        MainActivity.upDateScreen("",true);
 
     }
 
-    @Override
-    public boolean pendingOP() {
-        return false;
-    }
+
 
 
 }
