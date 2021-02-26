@@ -36,11 +36,6 @@ public class ErrorState implements State{
 
     }
 
-    @Override
-    public boolean pendingOP() {
-        return false;
-    }
-
 
     public void upDateScreen() {
 
