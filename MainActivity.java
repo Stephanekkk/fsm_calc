@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int MAX_CHARACTER_COUNT = 25; //max number of char the text field can handle before overflow
     public static Context _CONTEXT = new Context(); //the context object to control states
     public static TextView _screen; // the textfield of the app
+    public static TextView _showOp; //shows last typed op
     public static TextView _help; //displays current state
     public static TextView _help2; //displays buffers
     public static TextView _help3;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         _screen = findViewById(R.id.answerView);
+        _showOp = findViewById(R.id.opView);
         _help = findViewById(R.id.helperView);
         _help2 = findViewById(R.id.helperView1);
         _help3 = findViewById(R.id.helperView2);
@@ -43,27 +45,33 @@ public class MainActivity extends AppCompatActivity {
      * @param args <3
      */
     public static void main(String[] args) {
-        String x = "++1245///";
-        char[] x1 = new char[x.length()];
+//        String x = "++1245///";
+//        char[] x1 = new char[x.length()];
+//
+//
+//        Scanner x2 = new Scanner(String.valueOf(x1));
+//        Scanner x3 = new Scanner(x);
+//        x3.useDelimiter("");
+//        System.out.print(x3.next());
+//        System.out.print(x3.next() + "\n");
+//        System.out.print(x3.nextLine());
+//
+//        for (int i = 0; i < x.length(); i++) {
+//            while (x3.hasNext()) {
+//                x1[i] = x3.next().charAt(0);
+//            }
+//        }
+//
+//        System.out.print(x1[0] + "\n");
+//        System.out.print(x1[1] + "\n");
+//        System.out.print(x1[2]);
 
+        String x = "-.0";
+        String y = "-5";
+        System.out.println(Double.valueOf(x));
+        System.out.println(Double.parseDouble(y));
 
-        Scanner x2 = new Scanner(String.valueOf(x1));
-        Scanner x3 = new Scanner(x);
-        x3.useDelimiter("");
-        System.out.print(x3.next());
-        System.out.print(x3.next() + "\n");
-        System.out.print(x3.nextLine());
-
-        for (int i = 0; i < x.length(); i++) {
-            while (x3.hasNext()) {
-                x1[i] = x3.next().charAt(0);
-            }
-        }
-
-        System.out.print(x1[0] + "\n");
-        System.out.print(x1[1] + "\n");
-        System.out.print(x1[2]);
-
+        System.out.println(2/0);
 
     }
 
@@ -169,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             _CONTEXT.setCurrentState("AccumulatorState");
         } else if (currentState == "ZeroState" && input == inputType.mathOP) {
             _CONTEXT.mathOP();
+            _CONTEXT.setCurrentState("AccumulatorState");
         } else if (currentState == "ZeroState" && input == inputType.equals) {
             _CONTEXT.equals();
         } else if (currentState == "ZeroState" && input == inputType.clear) {
@@ -192,17 +201,16 @@ public class MainActivity extends AppCompatActivity {
             _CONTEXT.allClear();
             _CONTEXT.setCurrentState("ZeroState");
         }
-        /**   ALL AccumulatorState transitions                  */
+        /**   ALL ComputedState transitions                  */
         if (currentState == "ComputedState" && input == inputType.zero) {
             _CONTEXT.setCurrentState("ZeroState");
             _CONTEXT.allClear();
             _CONTEXT.zero();
         } else if (currentState == "ComputedState" && input == inputType.nonZeroDigit) {
-            _CONTEXT.setCurrentState("ZeroState");
-            _CONTEXT.zero();
+            _CONTEXT.nonZeroDigit();
+            _CONTEXT.setCurrentState("AccumulatorState");
         } else if (currentState == "ComputedState" && input == inputType.mathOP) {
-            _CONTEXT.setCurrentState("ZeroState");
-            _CONTEXT.mathOP();
+
         } else if (currentState == "ComputedState" && input == inputType.equals) {
             _CONTEXT.setCurrentState("ZeroState");
             _CONTEXT.equals();
@@ -217,14 +225,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void updateScreen(String x) {
-        if (MainActivity._lasttypedEnum == MainActivity.inputType.nonZeroDigit || MainActivity._lasttypedEnum == MainActivity.inputType.zero)//only print numbers)
+        if (_lasttypedEnum == inputType.nonZeroDigit || _lasttypedEnum == inputType.zero || _lasttypedChar == '-')//only print numbers and negative operation
             _screen.append(x);
     }
 
     public static void setScreen(String x) {
-        // if (MainActivity._lasttypedEnum == MainActivity.inputType.nonZeroDigit || MainActivity._lasttypedEnum == MainActivity.inputType.zero)//only print numbers)
-        _screen.setText(x);
+        _screen.setText(x); //only print numbers and operations )
+
     }
 
+    public static void updateLastOp(String x) {
+       _showOp.setText(x);
+    }
 }
 
