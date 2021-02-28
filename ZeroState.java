@@ -1,101 +1,47 @@
 package stephane.katende.fsm_calc;
 
-public class ZeroState implements State{
-    private boolean _pendingOp = false; //false indicates nothing has been typed yet, true means a valid argument has already been given to the user
-    private String _operation; //the number user typed
+public class ZeroState implements State {
 
     @Override
     public void zero() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
-
+        //ignore
     }
 
     @Override
     public void nonZeroDigit() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
+        MainActivity._CONTEXT.add_buffer(MainActivity._lasttypedChar);
+        MainActivity.updateScreen(Character.toString(MainActivity._lasttypedChar));
 
     }
 
     @Override
     public void mathOP() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
+        if (MainActivity._lasttypedChar == '-'){
+            MainActivity._CONTEXT.add_buffer(MainActivity._lasttypedChar);
+            MainActivity.updateScreen(Character.toString(MainActivity._lasttypedChar));
         }
-
+        //ignore
+        MainActivity.setScreen("");
     }
 
     @Override
     public void equals() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
-
+        //ignore
+        MainActivity.setScreen("");
     }
 
     @Override
     public void clear() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
+        //ignore
+        MainActivity.setScreen("");
     }
 
     @Override
     public void allClear() {
-        if(_pendingOp){//not the first time here!
-
-
-
-        }else{//first time here
-
-
-
-            _pendingOp = true;
-        }
-
-    }
-
-    @Override
-    public boolean pendingOP() {
-        return false;
+        //ignore
+        MainActivity._CONTEXT.set_buffer("");
+        MainActivity._CONTEXT.set_bufferv1("");
+        MainActivity.setScreen("");
     }
 
 

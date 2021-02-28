@@ -2,15 +2,44 @@ package stephane.katende.fsm_calc;
 
 public class Context {
     private State _currentState;
-    private boolean _pendingOP;
-    public static String _state;
+    private static String _state;
+    private String _buffer = ""; //first set of numbers
+    private String _bufferv1 = ""; //second set of numbers
 
-    public Context(){
+    public String get_buffer() {
+        return _buffer;
+    }
+
+    public void set_buffer(String _buffer) {
+        this._buffer = _buffer;
+
+    }
+
+    public void add_buffer(char x) {
+        if (get_buffer().length() + 1 < MainActivity.MAX_CHARACTER_COUNT)
+            _buffer += x;
+    }
+
+    public String get_bufferv1() {
+        return _bufferv1;
+    }
+
+    public void set_bufferv1(String _bufferv1) {
+        this._bufferv1 = _bufferv1;
+    }
+
+    public void add_bufferv1(char x) {
+        if (get_bufferv1().length() + 1 < MainActivity.MAX_CHARACTER_COUNT)
+            this._bufferv1 += x;
+    }
+
+    public Context() {
         _currentState = new ZeroState();
         _state = "ZeroState";
     }
 
-    public void setCurrentState(State state){
+
+    public void setCurrentState(State state) {
         _currentState = state;
     }
 
@@ -18,9 +47,9 @@ public class Context {
      * Set a current state using a string, ZeroState, AccumulatorState, ComputedState, ErrorState,
      * invalid inputs will NOT trigger the right state
      */
-    public void setCurrentState(String state){
+    public void setCurrentState(String state) {
 
-        switch (state){
+        switch (state) {
             case "ZeroState":
                 _currentState = new ZeroState();
                 state = "ZeroState";
@@ -42,14 +71,14 @@ public class Context {
     }
 
 
-    public String get_currentStateString(){
+    public String get_currentStateString() {
         return _state;
     }
 
     /**
      *
      */
-    public void zero(){
+    public void zero() {
         _currentState.zero();
     }
 
@@ -88,22 +117,5 @@ public class Context {
         _currentState.allClear();
     }
 
-    /**
-     *
-     * @return pendingOP
-     */
-    public boolean pendingOP(){
-        return _currentState.pendingOP();
-    }
 
-
-    /**
-     * Change what is displayed on the calculator's screen
-     * @param text the text to display, text <= MainActivity.MAX_CHARACTER_COUNT
-     */
-    public void upDateScreen(String text) {
-        if (text.length() <= MainActivity.MAX_CHARACTER_COUNT){
-            MainActivity._screen.setText(text);
-        }
-    }
 }
