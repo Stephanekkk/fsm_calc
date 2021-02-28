@@ -1,66 +1,71 @@
 package stephane.katende.fsm_calc;
 
-import android.widget.Toast;
-
 import java.util.Scanner;
 
 public class ComputedState implements State {
-    double _secondInput;
 
     @Override
+    /**
+     * Resets the screen as a precautionary measure
+     */
     public void zero() {
-        //ignore
         MainActivity.setScreen("");
     }
 
     @Override
+    /**
+     * Resets the two buffer & screen, adds to the appropriate buffer (updates screen too)
+     */
     public void nonZeroDigit() {
         MainActivity.setScreen("");
         MainActivity._CONTEXT.set_buffer("");
-        MainActivity._CONTEXT.set_bufferv1("");
+        MainActivity._CONTEXT.set_secBuffer("");
         MainActivity._CONTEXT.add_buffer(MainActivity._lasttypedChar);
         MainActivity.updateScreen(Character.toString(MainActivity._lasttypedChar));
     }
 
     @Override
+    /**
+     * Resets the screen as a precautionary measure
+     */
     public void mathOP() {
-        //ignore
-
         MainActivity.setScreen("");
     }
 
     @Override
+    /**
+     * Finds an answer (if there is one, updates the screen too), resets the two buffer & screen
+     */
     public void equals() {
-
         if (factChecker()) {
             double x = showAnswer();
             String.format("%.002f", x);
             MainActivity.setScreen(String.valueOf(x));
             //show last typed operation
             MainActivity.updateLastOp("Last Input : " + MainActivity._CONTEXT.get_buffer() + " "
-                    + MainActivity._CONTEXT.get_bufferv1().charAt(0) + " " + MainActivity._CONTEXT.get_bufferv1().substring(1));
+                    + MainActivity._CONTEXT.get_secBuffer().charAt(0) + " " + MainActivity._CONTEXT.get_secBuffer().substring(1));
         } else {
             //show last typed operation
             MainActivity.updateLastOp("Last Input : " + MainActivity._CONTEXT.get_buffer() + " "
-                    + MainActivity._CONTEXT.get_bufferv1().charAt(0) + " " + MainActivity._CONTEXT.get_bufferv1().substring(1));
+                    + MainActivity._CONTEXT.get_secBuffer().charAt(0) + " " + MainActivity._CONTEXT.get_secBuffer().substring(1));
             //reset everything
             MainActivity.setScreen("");
             MainActivity._CONTEXT.set_buffer("");
-            MainActivity._CONTEXT.set_bufferv1("");
+            MainActivity._CONTEXT.set_secBuffer("");
         }
 
     }
 
     /**
-     * computes an answer of the first input [last operator used] second input(as doubles), assumes the inputs are valid!
+     * Compute an answer from the two buffers
      *
-     * @return first input [last operator used] second input, i.e "1" + "1" will give results "1.0"
+     * @return the answer, 0.0 returned if nothing found
      */
     double showAnswer() {
         double x = 0, y = 0;
         x = Double.parseDouble(MainActivity._CONTEXT.get_buffer());
         //getting the second number
-        Scanner x1 = new Scanner(MainActivity._CONTEXT.get_bufferv1());
+        Scanner x1 = new Scanner(MainActivity._CONTEXT.get_secBuffer());
         x1.useDelimiter("");
         String x2 = x1.next(); //gets rid of the operation
         y = Double.parseDouble(x1.nextLine());
@@ -82,11 +87,11 @@ public class ComputedState implements State {
     /**
      * Can an answer be computed?
      *
-     * @return true = an answer can be found, false = not computable
+     * @return true = an answer can be found, false = not computable (errors within either buffers)
      */
     boolean factChecker() {
-        String first = MainActivity._CONTEXT.get_buffer();
-        String second = MainActivity._CONTEXT.get_bufferv1(); //first characters will be operations
+        String first = MainActivity._CONTEXT.get_buffer(); //first char could be a '-'?
+        String second = MainActivity._CONTEXT.get_secBuffer(); //first characters will be operations, second char could be a '-'?
         Scanner secondScanner = new Scanner(second);
         secondScanner.useDelimiter("");
         char[] firstNums = new char[first.length()];
@@ -151,21 +156,23 @@ public class ComputedState implements State {
             return false;
 
         }
-        return true; // errors dectected all is good!
+        return true; // no errors detected,  all is good (hopefully)!
     }
 
     @Override
+    /**
+     * Resets the screen as a precautionary measure
+     */
     public void clear() {
-        //ignore
         MainActivity.setScreen("");
-
     }
 
     @Override
+    /**
+     * Resets the screen as a precautionary measure
+     */
     public void allClear() {
-        //ignore
         MainActivity.setScreen("");
-
     }
 
 }

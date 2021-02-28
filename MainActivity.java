@@ -1,6 +1,6 @@
 package stephane.katende.fsm_calc;
 /**
- * @Author Stephane Katende made with ❤ 2/20/21, the application used the design pattern described here https://fsharpforfunandprofit.com/posts/calculator-complete-v2/
+ * @Author Stephane Katende made with ❤ 2/20/21, the application used (tried to anyway) the design pattern described here https://fsharpforfunandprofit.com/posts/calculator-complete-v2/
  * and uses the principles described here https://en.wikipedia.org/wiki/Single-responsibility_principle
  */
 
@@ -13,20 +13,15 @@ import android.widget.Toast;
 
 import java.util.Scanner;
 
-// be very careful with objects and try not to make new instances of them, nothing will work how you intended it to :)
 public class MainActivity extends AppCompatActivity {
     public static final int MAX_CHARACTER_COUNT = 25; //max number of char the text field can handle before overflow
     public static Context _CONTEXT = new Context(); //the context object to control states
-    public static TextView _screen; // the textfield of the app
+    public static TextView _screen; // the text field of the calc
     public static TextView _showOp; //shows last typed op
-    public static TextView _help; //displays current state
-    public static TextView _help2; //displays buffers
-    public static TextView _help3;
-    public static char _lasttypedChar;
-    public static inputType _lasttypedEnum;
+    public static char _lasttypedChar; //gives the last typed char
+    public static inputType _lasttypedEnum; //gives the last typed inputType
 
-    public enum inputType {zero, nonZeroDigit, mathOP, equals, clear, allClear}//posible types of inputs
-
+    public enum inputType {zero, nonZeroDigit, mathOP, equals, clear, allClear}//an enum of all the possible types of inputs
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         _screen = findViewById(R.id.answerView);
         _showOp = findViewById(R.id.opView);
-        _help = findViewById(R.id.helperView);
-        _help2 = findViewById(R.id.helperView1);
-        _help3 = findViewById(R.id.helperView2);
+
     }
 
     /**
@@ -70,14 +63,17 @@ public class MainActivity extends AppCompatActivity {
         String y = "-5";
         System.out.println(Double.valueOf(x));
         System.out.println(Double.parseDouble(y));
+        boolean xy = !false;
+        boolean xyy = !(!false); //? hmm
 
-        System.out.println(2/0);
+        System.out.println(2 / 0);
 
     }
 
     /**
-     * @param view
-     * @return
+     * Actions taken when a button is pressed
+     *
+     * @param view the app view
      */
     public void buttonPressed(View view) {
         int id = view.getId(); //what button is pressed?
@@ -86,17 +82,13 @@ public class MainActivity extends AppCompatActivity {
         inputType input = buttonType(valuePressed(id)); //what type of input is it?
         _lasttypedEnum = input;
         transitionState(_CONTEXT.get_currentStateString(), input);// what state should it be sent to?
-        //testing purposes
-        _help.setText("Current State = " + _CONTEXT.get_currentStateString());
-        _help2.setText("First buffer contains = " + _CONTEXT.get_buffer());
-        _help3.setText("Second buffer contains = " + _CONTEXT.get_bufferv1());
     }
 
     /**
-     * given a button id it will return the char value of it, '0' is returned if no id found
+     * Given a button id it will return the char value of it, 'E' is returned if no id found
      *
-     * @param id
-     * @return the character value of each button , A for allclear & C for clear
+     * @param id the button id
+     * @return the character value of each button , 'A' for all clear, 'C' for all clear
      */
     char valuePressed(int id) {
         switch (id) {
@@ -137,14 +129,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.c_button:
                 return 'C';
         }
-        return '0';
+        return 'E';
     }
 
 
     /**
-     * given a button name it will spit out the type of input it is
+     * Gives an inputType based on the char
      *
-     * @return inputType the type of input it is
+     * @return inputType the type of input it is, i.e '9' will return InputType.nonZeroDigit
      */
     inputType buttonType(char x) {
         if (x == '0') {
@@ -163,10 +155,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Given a current State, and type of input, send me to the right state and take care of business
+     * Given a current State and type of input, send me to the right state and take care of business
      *
-     * @param
-     * @param input
+     * @param currentState the state currently in
+     * @param input        the type of input
      */
     public static void transitionState(String currentState, inputType input) {
         /**   ALL ZeroState transitions                  */
@@ -224,18 +216,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Append text to the calc's screen
+     *
+     * @param x the string
+     */
     public static void updateScreen(String x) {
         if (_lasttypedEnum == inputType.nonZeroDigit || _lasttypedEnum == inputType.zero || _lasttypedChar == '-')//only print numbers and negative operation
             _screen.append(x);
     }
 
+    /**
+     * Set text to the calc's screen
+     *
+     * @param x the string
+     */
     public static void setScreen(String x) {
         _screen.setText(x); //only print numbers and operations )
 
     }
 
+    /**
+     * Set text to the calc's lastOp screen
+     *
+     * @param x
+     */
     public static void updateLastOp(String x) {
-       _showOp.setText(x);
+        _showOp.setText(x);
     }
 }
 

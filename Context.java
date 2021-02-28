@@ -4,48 +4,72 @@ public class Context {
     private State _currentState;
     private static String _state;
     private String _buffer = ""; //first set of numbers
-    private String _bufferv1 = ""; //second set of numbers
-
-    public String get_buffer() {
-        return _buffer;
-    }
-
-    public void set_buffer(String _buffer) {
-        this._buffer = _buffer;
-
-    }
-
-    public void add_buffer(char x) {
-        if (get_buffer().length() + 1 < MainActivity.MAX_CHARACTER_COUNT)
-            _buffer += x;
-    }
-
-    public String get_bufferv1() {
-        return _bufferv1;
-    }
-
-    public void set_bufferv1(String _bufferv1) {
-        this._bufferv1 = _bufferv1;
-    }
-
-    public void add_bufferv1(char x) {
-        if (get_bufferv1().length() + 1 < MainActivity.MAX_CHARACTER_COUNT)
-            this._bufferv1 += x;
-    }
+    private String _secBuffer = ""; //second set of numbers
 
     public Context() {
         _currentState = new ZeroState();
         _state = "ZeroState";
     }
 
-
-    public void setCurrentState(State state) {
-        _currentState = state;
+    /**
+     * Get the first buffer
+     *
+     * @return the buffer
+     */
+    public String get_buffer() {
+        return _buffer;
     }
 
     /**
-     * Set a current state using a string, ZeroState, AccumulatorState, ComputedState, ErrorState,
-     * invalid inputs will NOT trigger the right state
+     * Set the first buffer
+     */
+    public void set_buffer(String _buffer) {
+        this._buffer = _buffer;
+
+    }
+
+    /**
+     * Add to the first buffer
+     *
+     * @param x the char to add
+     */
+    public void add_buffer(char x) {
+        if (get_buffer().length() + 1 < MainActivity.MAX_CHARACTER_COUNT)
+            _buffer += x;
+    }
+
+    /**
+     * Get the second buffer
+     *
+     * @return the buffer
+     */
+    public String get_secBuffer() {
+        return _secBuffer;
+    }
+
+    /**
+     * Set the second buffer
+     *
+     * @param _secBuffer the string
+     */
+    public void set_secBuffer(String _secBuffer) {
+        this._secBuffer = _secBuffer;
+    }
+
+    /**
+     * Add to the first buffer
+     *
+     * @param x the char to add
+     */
+    public void add_bufferv1(char x) {
+        if (get_secBuffer().length() + 1 < MainActivity.MAX_CHARACTER_COUNT)
+            this._secBuffer += x;
+    }
+
+    /**
+     * Set a current state, ZeroState is the default should input be invalid ("blah blah")
+     *
+     * @param state the state i.e ZeroState, AccumulatorState, ComputedState, ErrorState,
      */
     public void setCurrentState(String state) {
 
@@ -66,52 +90,58 @@ public class Context {
                 _currentState = new ErrorState();
                 state = "ErrorState";
                 break;
+            default:
+                _currentState = new ZeroState();
         }
         _state = state;
     }
 
-
+    /**
+     * Get the current State
+     *
+     * @return the current state
+     */
     public String get_currentStateString() {
         return _state;
     }
 
     /**
-     *
+     * Call zero
      */
     public void zero() {
         _currentState.zero();
     }
 
     /**
-     *
+     * Call nonZeroDigit
      */
     public void nonZeroDigit() {
         _currentState.nonZeroDigit();
     }
 
     /**
-     *
+     * Call mathOP
      */
     public void mathOP() {
         _currentState.mathOP();
     }
 
     /**
-     *
+     * Call equals
      */
     public void equals() {
         _currentState.equals();
     }
 
     /**
-     * Based on currentstate, what to do when a "clear" action is received
+     * Call clear
      */
     public void clear() {
         _currentState.clear();
     }
 
     /**
-     * Based on currentstate, what to do when a "clear" action is received
+     * Call allclear
      */
     public void allClear() {
         _currentState.allClear();

@@ -2,42 +2,36 @@ package stephane.katende.fsm_calc;
 
 import android.widget.Toast;
 
-public class ErrorState implements State{
+public class ErrorState implements State {
 
     @Override
     public void zero() {
-
+        //not yet implemented
     }
 
     @Override
     public void nonZeroDigit() {
-        System.out.println("You reached me!");
-
-
+        //not yet implemented
     }
 
     @Override
     public void mathOP() {
-        System.out.println("I am ErrorState with mathOP action");
+        //not yet implemented
     }
 
     @Override
     public void equals() {
-        System.out.println("I am Error State of equals input!");
+        //not yet implemented
     }
 
     @Override
     public void clear() {
-
+        //not yet implemented
     }
 
     @Override
     public void allClear() {
-
+        //not yet implemented
     }
 
-
-    public void upDateScreen() {
-
-    }
 }

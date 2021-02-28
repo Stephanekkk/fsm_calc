@@ -3,11 +3,17 @@ package stephane.katende.fsm_calc;
 public class ZeroState implements State {
 
     @Override
+    /**
+     * Ignore
+     */
     public void zero() {
-        //ignore
+
     }
 
     @Override
+    /**
+     * Adds the char to first buffer (updates screen)
+     */
     public void nonZeroDigit() {
         MainActivity._CONTEXT.add_buffer(MainActivity._lasttypedChar);
         MainActivity.updateScreen(Character.toString(MainActivity._lasttypedChar));
@@ -15,32 +21,41 @@ public class ZeroState implements State {
     }
 
     @Override
+    /**
+     * Appends '-' to buffer( updates screen too), or ignores & resets screen
+     */
     public void mathOP() {
-        if (MainActivity._lasttypedChar == '-'){
+        if (MainActivity._lasttypedChar == '-') {
             MainActivity._CONTEXT.add_buffer(MainActivity._lasttypedChar);
             MainActivity.updateScreen(Character.toString(MainActivity._lasttypedChar));
         }
-        //ignore
         MainActivity.setScreen("");
     }
 
     @Override
+    /**
+     * Resets the screen
+     */
     public void equals() {
-        //ignore
         MainActivity.setScreen("");
     }
 
     @Override
+    /**
+     * Resets the screen
+     */
     public void clear() {
-        //ignore
         MainActivity.setScreen("");
     }
 
     @Override
+    /**
+     * Resets the two buffer & screen
+     */
     public void allClear() {
         //ignore
         MainActivity._CONTEXT.set_buffer("");
-        MainActivity._CONTEXT.set_bufferv1("");
+        MainActivity._CONTEXT.set_secBuffer("");
         MainActivity.setScreen("");
     }
 
