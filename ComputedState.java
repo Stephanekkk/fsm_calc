@@ -42,14 +42,14 @@ public class ComputedState implements State {
             String.format("%.002f", x);
             MainActivity.setScreen(String.valueOf(x));
             //show last typed operation
-            if (MainActivity._CONTEXT.get_buffer().length() > 0 && MainActivity._CONTEXT.get_secBuffer().length() > 0 ){//saves charAt & substring from crashing incase of "" buffer
+            if (MainActivity._CONTEXT.get_buffer().length() > 0 && MainActivity._CONTEXT.get_secBuffer().length() > 0) {//saves charAt & substring from crashing incase of "" buffer
                 MainActivity.updateLastOp("Last Input : " + MainActivity._CONTEXT.get_buffer() + " "
                         + MainActivity._CONTEXT.get_secBuffer().charAt(0) + " " + MainActivity._CONTEXT.get_secBuffer().substring(1));
             }
 
         } else {
             //show last typed operation
-            if (MainActivity._CONTEXT.get_buffer().length() > 0 && MainActivity._CONTEXT.get_secBuffer().length() > 0 ){
+            if (MainActivity._CONTEXT.get_buffer().length() > 0 && MainActivity._CONTEXT.get_secBuffer().length() > 0) {
                 MainActivity.updateLastOp("Last Input : " + MainActivity._CONTEXT.get_buffer() + " "
                         + MainActivity._CONTEXT.get_secBuffer().charAt(0) + " " + MainActivity._CONTEXT.get_secBuffer().substring(1));
             }
@@ -111,11 +111,9 @@ public class ComputedState implements State {
         }
 
         /** DEALING WITH MOST COMMON ERROR */
-        //empty or null buffers
-        if(first.length() == 0 || second.length() ==0)
-            return false;
 
-        if (second.length() > 1) { //must have more than 2 characters
+
+        if (first.length() >= 1 && second.length() > 1) { //must have more than 2 characters
 
             //dive by zero
             if (secondNums[0] == '/' && secondNums[1] == '0')
