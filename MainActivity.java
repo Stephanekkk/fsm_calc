@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
         boolean xy = !false;
         boolean xyy = !(!false); //? hmm
 
-        System.out.println(2 / 0);
+//        System.out.println();
+        String hel = "";
+        System.out.println(hel.length() > 0);
 
     }
 
@@ -239,10 +241,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Set text to the calc's lastOp screen
      *
-     * @param x
+     * @param text the string
      */
-    public static void updateLastOp(String x) {
-        _showOp.setText(x);
+    public static void updateLastOp(String text) {
+        _showOp.setText(text);
     }
 }
 
